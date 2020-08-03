@@ -1,4 +1,9 @@
 #!/bin/sh
+# Date: v0.1, 03-Aug-2020
+# 
+# Removed downloading old version AdGuard
+# Removed automatic delete AdGuard when stopping
+# Added cleaning up AdGuard data directory when stopping
 
 change_dns() {
 if [ "$(nvram get adg_redirect)" = 1 ]; then
@@ -151,7 +156,7 @@ chmod 777 /tmp/AdGuardHome/AdGuardHome
 }
 
 start_adg(){
-    mkdir -p /tmp/AdGuardHome
+  mkdir -p /tmp/AdGuardHome
 	mkdir -p /etc/storage/AdGuardHome
 	if [ ! -f "/tmp/AdGuardHome/AdGuardHome" ]; then
 	dl_adg
@@ -164,7 +169,8 @@ start_adg(){
 
 }
 stop_adg(){
-rm -rf /tmp/AdGuardHome
+#rm -rf /tmp/AdGuardHome
+rm -rf /tmp/AdGuardHome/data
 killall -9 AdGuardHome
 del_dns
 clear_iptable
