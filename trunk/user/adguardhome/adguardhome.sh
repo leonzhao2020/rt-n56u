@@ -147,7 +147,7 @@ logger -t "AdGuardHome" "下载AdGuardHome"
 #else
 #logger -t "AdGuardHome" "AdGuardHome下载成功。"
 chmod 777 /tmp/AdGuardHome/AdGuardHome
-fi
+#fi
 }
 
 start_adg(){
