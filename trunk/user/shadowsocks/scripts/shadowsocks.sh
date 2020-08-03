@@ -4,10 +4,13 @@
 # Copyright (C) 2017 yushi studio <ywb94@qq.com>
 # Copyright (C) 2018 lean <coolsnowwolf@gmail.com>
 # Copyright (C) 2019 chongshengB <bkye@vip.qq.com>
+# Copyright (C) 2020 Leon Zhao <leonzhao@outlook.com>
 #
 # This is free software, licensed under the GNU General Public License v3.
 # See /LICENSE for more information.
 #
+# add ADGuard instead of tunnel_forward
+tunnel_forward='127.0.0.1#5335'
 NAME=shadowsocksr
 http_username=`nvram get http_username`
 CONFIG_FILE=/tmp/${NAME}.json
@@ -280,7 +283,8 @@ case "$run_mode" in
         logger -t "SS" "cdn域名文件下载成功"
 		fi
 		logger -st "SS" "启动chinadns..."
-		dns2tcp -L"127.0.0.1#5353" -R"$(nvram get tunnel_forward)" >/dev/null 2>&1 &
+		#dns2tcp -L"127.0.0.1#5353" -R"$(nvram get tunnel_forward)" >/dev/null 2>&1 &
+		dns2tcp -L"127.0.0.1#5353" -R"$tunnel_forward" >/dev/null 2>&1 &
 		chinadns-ng -b 0.0.0.0 -l 65353 -c $(nvram get china_dns) -t 127.0.0.1#5353 -4 china -m /tmp/cdn.txt >/dev/null 2>&1 &
 	sed -i '/no-resolv/d' /etc/storage/dnsmasq/dnsmasq.conf
 sed -i '/server=127.0.0.1/d' /etc/storage/dnsmasq/dnsmasq.conf
@@ -292,7 +296,8 @@ EOF
 	;;
 	gfw)
 		if [ $(nvram get pdnsd_enable) = 0 ]; then
-			dnsstr="$(nvram get tunnel_forward)"
+			#dnsstr="$(nvram get tunnel_forward)"
+			dnsstr=$tunnel_forward
 			dnsserver=$(echo "$dnsstr" | awk -F '#' '{print $1}')
 			#dnsport=$(echo "$dnsstr" | awk -F '#' '{print $2}')
 			ipset add gfwlist $dnsserver 2>/dev/null
